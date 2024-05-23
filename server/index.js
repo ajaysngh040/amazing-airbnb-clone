@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:10000",
+    origin: "*",
   })
 );
 app.use("/uploads", express.static(__dirname + "/uploads"));
