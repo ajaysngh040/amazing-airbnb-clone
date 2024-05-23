@@ -37,10 +37,6 @@ mongoose.connect(process.env.MONGO_URL);
 
 // Example route to handle GET requests
 
-app.get("/test", (req, res) => {
-  res.send("Hello, World!");
-});
-
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
     jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
