@@ -15,7 +15,6 @@ client/dist-ssr
 server/node_modules
 server/dist
 server/dist-ssr
-server/uploads
 
 # Editor directories and files
 .vscode/*
