@@ -13,7 +13,8 @@
   },
   "scripts": {
     "server": "nodemon index.js",
-    "dev": "concurrently \"npm run client\" \"npm run server\" ",
+    "dev": "npm run server",
     "build":"npm install"
+    
   }
 }
