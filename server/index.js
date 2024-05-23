@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: "https://amazing-airbnb-clone.vercel.app/",
+    origin: "http://localhost:10000",
   })
 );
 app.use("/uploads", express.static(__dirname + "/uploads"));
