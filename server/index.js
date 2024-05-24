@@ -25,12 +25,12 @@ const jwtSecret = "wekcjoicoam9cialcqa4scdm5";
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: "https://amazing-airbnb-clone.vercel.app",
-//   })
-// );
+app.use(
+  cors({
+    credentials: true,
+    origin: "*",
+  })
+);
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.use((req, res, next) => {
