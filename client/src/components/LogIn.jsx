@@ -8,13 +8,16 @@ export default function LogIn() {
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState("");
   const { user, setUser } = useContext(UserContext);
+
   async function handleLoginSubmit(ev) {
     ev.preventDefault();
     try {
-      const data = await axios.post("/login", { email, password });
-      setUser(data);
-      setRedirect("/");
-      alert("Login successful");
+      const response = await axios.post("/login", { email, password });
+      if (response.status === 200) {
+        setUser(response.data);
+        setRedirect("/");
+        alert("Login successful");
+      }
     } catch (e) {
       alert("Login failed");
     }

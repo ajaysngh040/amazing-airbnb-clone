@@ -137,7 +137,7 @@ app.get("/profile", (req, res) => {
       res.json({ name, email, _id });
     });
   } else {
-    res.json(null);
+    res.status(401).json({ error: "No token found" });
   }
 });
 
@@ -284,5 +284,5 @@ app.get("/bookings", async (req, res) => {
 // Start the server
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on ${process.env.APP_URL}:${PORT}`);
 });
