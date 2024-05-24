@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { getCookie } from "../utilityFunction";
 
 export const UserContext = createContext({});
 
@@ -9,10 +10,8 @@ export function UserContextProvider({ children }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    let token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,
-      "$1"
-    );
+    let token = getCookie("token");
+
     if (token && !user) {
       axios
         .get("/profile")
