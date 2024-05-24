@@ -34,10 +34,7 @@ app.use(
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://amazing-airbnb-clone.vercel.app"
-  );
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
@@ -55,19 +52,19 @@ app.use((req, res, next) => {
 });
 
 // Set preflight
-// app.options("*", (req, res) => {
-//   console.log("preflight");
-//   if (
-//     req.headers.origin === "https://amazing-airbnb-clone.vercel.app" &&
-//     allowMethods.includes(req.headers["access-control-request-method"]) &&
-//     allowHeaders.includes(req.headers["access-control-request-headers"])
-//   ) {
-//     console.log("pass");
-//     return res.status(204).send();
-//   } else {
-//     console.log("fail");
-//   }
-// });
+app.options("*", (req, res) => {
+  console.log("preflight");
+  if (
+    req.headers.origin === "https://amazing-airbnb-clone.vercel.app" &&
+    allowMethods.includes(req.headers["access-control-request-method"]) &&
+    allowHeaders.includes(req.headers["access-control-request-headers"])
+  ) {
+    console.log("pass");
+    return res.status(204).send();
+  } else {
+    console.log("fail");
+  }
+});
 
 mongoose.connect(process.env.MONGO_URL);
 
