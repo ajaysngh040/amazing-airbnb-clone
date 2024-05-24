@@ -9,8 +9,11 @@ export function UserContextProvider({ children }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (!user) {
-      console.log({ user });
+    let token = document.cookie.replace(
+      /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    if (token && !user) {
       axios
         .get("/profile")
         .then(({ data }) => {
