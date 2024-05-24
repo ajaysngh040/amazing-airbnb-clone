@@ -34,7 +34,10 @@ app.use(
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://your-frontend.com");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://amazing-airbnb-clone.vercel.app"
+  );
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
