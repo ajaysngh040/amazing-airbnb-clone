@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Axios from "axios";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [redirect, setRedirect] = useState("");
 
   async function registerUser(ev) {
     ev.preventDefault();
@@ -16,12 +17,17 @@ export default function SignUp() {
         email,
         password,
       });
+      setRedirect("");
+
       alert("Registration successfull");
     } catch (e) {
       alert("Registration failed. Please try again later");
     }
   }
 
+  if (redirect) {
+    <Navigate to={"/login"} />;
+  }
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-32">
