@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../context/UserContext";
 
 export default function Profile() {
   const { ready, user, setUser } = useContext(UserContext);

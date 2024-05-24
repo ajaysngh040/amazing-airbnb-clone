@@ -6,7 +6,7 @@ import { SiAirbnb } from "react-icons/si";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../context/UserContext";
 export default function Header() {
   const { user } = useContext(UserContext);
   // const items = [

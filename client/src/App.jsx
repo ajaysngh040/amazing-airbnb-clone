@@ -8,7 +8,7 @@ import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn";
 import ProfilePage from "./pages/ProfilePage";
 import Axios from "axios";
-import { UserContextProvider } from "./UserContext";
+import { UserContextProvider } from "./context/UserContext";
 import PlacesPage from "./pages/PlacesPage";
 import PlacesFormPage from "./pages/PlacesFormPage";
 import PlacePage from "./pages/PlacePage";
