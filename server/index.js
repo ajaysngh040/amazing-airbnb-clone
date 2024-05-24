@@ -25,49 +25,48 @@ const jwtSecret = "wekcjoicoam9cialcqa4scdm5";
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    credentials: true,
-    origin: "https://amazing-airbnb-clone.vercel.app",
-  })
-);
+
+const corsOption = {
+  credentials: true,
+  origin: process.env.APP_URL,
+};
+app.use(cors(corsOption));
+
 app.use("/uploads", express.static(__dirname + "/uploads"));
+console.log(process.env.APP_URL);
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", process.env.APP_URL);
 
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://amazing-airbnb-clone.vercel.app"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  res.setHeader("Access-Control-Allow-Private-Network", true);
-  //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
-  res.setHeader("Access-Control-Max-Age", 7200);
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
+//   );
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+//   );
+//   res.setHeader("Access-Control-Allow-Credentials", true);
+//   res.setHeader("Access-Control-Allow-Private-Network", true);
+//   //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
+//   res.setHeader("Access-Control-Max-Age", 7200);
 
-  next();
-});
+//   next();
+// });
 
 // Set preflight
-app.options("https://amazing-airbnb-clone.vercel.app", (req, res) => {
-  console.log("preflight");
-  if (
-    req.headers.origin === "https://amazing-airbnb-clone.vercel.app" &&
-    allowMethods.includes(req.headers["access-control-request-method"]) &&
-    allowHeaders.includes(req.headers["access-control-request-headers"])
-  ) {
-    console.log("pass");
-    return res.status(204).send();
-  } else {
-    console.log("fail");
-  }
-});
+// app.options(process.env.APP_URL, (req, res) => {
+//   console.log("preflight");
+//   if (
+//     req.headers.origin === process.env.APP_URL &&
+//     allowMethods.includes(req.headers["access-control-request-method"]) &&
+//     allowHeaders.includes(req.headers["access-control-request-headers"])
+//   ) {
+//     console.log("pass");
+//     return res.status(204).send();
+//   } else {
+//     console.log("fail");
+//   }
+// });
 
 mongoose.connect(process.env.MONGO_URL);
 
