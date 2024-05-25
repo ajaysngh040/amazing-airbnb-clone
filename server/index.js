@@ -33,26 +33,41 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 mongoose.connect(process.env.MONGO_URL);
 
 // Utility function to get user data from JWT token in cookies
-function getUserDataFromReq(req) {
-  return new Promise((resolve, reject) => {
-    try {
-      const token = req.cookies.token;
-      if (!token) {
-        return reject("No token provided"); // Reject if no token is found
-      }
+// function getUserDataFromReq(req) {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       const token = req.cookies.token;
+//       if (!token) {
+//         return reject("No token provided"); // Reject if no token is found
+//       }
 
-      jwt.verify(token, process.env.JWT_SECRET, (error, userData) => {
-        if (error) {
-          console.error("Error in verifying token:", error);
-          return reject("Auth error"); // Reject if token verification fails
-        }
-        resolve(userData); // Resolve with user data if verification is successful
-      });
-    } catch (error) {
-      console.error("Unexpected error in getUserDataFromReq:", error);
-      reject("Unexpected auth error"); // Catch unexpected errors
+//       jwt.verify(token, process.env.JWT_SECRET, (error, userData) => {
+//         if (error) {
+//           console.error("Error in verifying token:", error);
+//           return reject("Auth error"); // Reject if token verification fails
+//         }
+//         resolve(userData); // Resolve with user data if verification is successful
+//       });
+//     } catch (error) {
+//       console.error("Unexpected error in getUserDataFromReq:", error);
+//       reject("Unexpected auth error"); // Catch unexpected errors
+//     }
+//   });
+// }
+
+function getUserDataFromReq(req) {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      throw new Error("No token provided");
     }
-  });
+
+    const userData = jwt.verify(token, process.env.JWT_SECRET);
+    return userData;
+  } catch (error) {
+    console.error("Error in getUserDataFromReq:", error);
+    throw new Error("Auth error");
+  }
 }
 
 // User registration
