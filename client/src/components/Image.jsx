@@ -1,8 +1,27 @@
 /* eslint-disable react/prop-types */
-export default function Image({ src, ...rest }) {
-  src =
-    src && src.includes("https://")
+
+export default function Image({ src, alt = "", ...rest }) {
+  // Ensure that VITE_BASE_API_URL is defined
+  const baseUrl = import.meta.env.VITE_BASE_API_URL;
+
+  if (!baseUrl) {
+    console.error("VITE_BASE_API_URL is not defined");
+    return null;
+  }
+
+  // Handle cases where src is undefined or null
+  const resolvedSrc = src
+    ? src.includes("https://")
       ? src
-      : `${import.meta.env.VITE_BASE_API_URL}/uploads/${src}`;
-  return <img {...rest} src={src} alt={""} />;
+      : `${baseUrl}/uploads/${src}`
+    : null;
+
+  // If resolvedSrc is null, render nothing or a placeholder
+  if (!resolvedSrc) {
+    return (
+      <img {...rest} src="/path/to/placeholder/image.jpg" alt="Placeholder" />
+    );
+  }
+
+  return <img {...rest} src={resolvedSrc} alt={alt} />;
 }
