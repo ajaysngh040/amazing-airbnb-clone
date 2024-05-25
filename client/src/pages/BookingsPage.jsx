@@ -7,11 +7,33 @@ import BookingDates from "../components/BookingDates";
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    axios.get("/bookings").then((response) => {
-      setBookings(response.data);
-    });
+    const fetchBookings = async () => {
+      try {
+        const response = await axios.get("/bookings");
+        setBookings(response.data);
+      } catch (err) {
+        console.error("Error fetching bookings:", err);
+        setError("Failed to fetch bookings.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
   return (
     <div>
       <AccountNav />

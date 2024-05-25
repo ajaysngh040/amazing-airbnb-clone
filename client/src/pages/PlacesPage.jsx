@@ -6,11 +6,32 @@ import PlaceImg from "../components/PlaceImg";
 
 export default function PlacesPage() {
   const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    axios.get("/user-places").then(({ data }) => {
-      setPlaces(data);
-    });
+    const fetchUserPlaces = async () => {
+      try {
+        const response = await axios.get("/user-places");
+        setPlaces(response.data);
+      } catch (err) {
+        console.error("Error fetching user places:", err);
+        setError("Failed to fetch user places.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserPlaces();
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
   return (
     <div className="relative">
       <AccountNav />

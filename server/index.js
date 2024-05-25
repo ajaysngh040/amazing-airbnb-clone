@@ -261,7 +261,7 @@ app.get("/bookings", async (req, res) => {
     );
     res.status(200).json(bookings);
   } catch (error) {
-    console.error("Error in /bookings route:", error); // Detailed error logging
+    console.error("Error in /bookings route:", error.response.data); // Detailed error logging
     res.status(500).json({ error: error.toString() });
   }
 });
