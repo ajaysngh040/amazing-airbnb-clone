@@ -33,21 +33,27 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 mongoose.connect(process.env.MONGO_URL);
 
 // Utility function to get user data from JWT token in cookies
-const getUserDataFromReq = (req) => {
+function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
-    const token = req.cookies.token;
-    if (!token) {
-      return reject("No token provided");
-    }
     try {
-      const userData = jwt.verify(token, process.env.JWT_SECRET);
-      resolve(userData);
+      const token = req.cookies.token;
+      if (!token) {
+        return reject("No token provided"); // Reject if no token is found
+      }
+
+      jwt.verify(token, process.env.JWT_SECRET, (error, userData) => {
+        if (error) {
+          console.error("Error in verifying token:", error);
+          return reject("Auth error"); // Reject if token verification fails
+        }
+        resolve(userData); // Resolve with user data if verification is successful
+      });
     } catch (error) {
-      console.log("Error in getUserDataFromReq:", error);
-      reject("Auth error");
+      console.error("Unexpected error in getUserDataFromReq:", error);
+      reject("Unexpected auth error"); // Catch unexpected errors
     }
   });
-};
+}
 
 // User registration
 app.post("/register", async (req, res) => {
@@ -231,13 +237,17 @@ app.post("/bookings", async (req, res) => {
 app.get("/bookings", async (req, res) => {
   try {
     const userData = await getUserDataFromReq(req);
+    if (!userData) {
+      return res.status(403).json({ error: "Invalid token or user not found" });
+    }
+    console.log("User Data:", userData); // Log user data for debugging
     const bookings = await Booking.find({ user: userData.id }).populate(
       "place"
     );
-    res.json(bookings);
+    res.status(200).json(bookings);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch bookings" });
+    console.error("Error in /bookings route:", error); // Detailed error logging
+    res.status(500).json({ error: error.toString() });
   }
 });
 
