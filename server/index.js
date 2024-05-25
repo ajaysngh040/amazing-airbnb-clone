@@ -35,18 +35,33 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 
 mongoose.connect(process.env.MONGO_URL);
 
-// Example route to handle GET requests
+// function getUserDataFromReq(req) {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       const userData = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+//       if (userData) {
+//         resolve(userData);
+//       }
+//     } catch (error) {
+//       console.log("error in get user from request", error);
+//       // res.status(403).json({error})
+//       reject("Auth error");
+//     }
+//   });
+// }
 
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
     try {
-      const userData = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-      if (userData) {
-        resolve(userData);
+      const token = req.cookies.token;
+      if (!token) {
+        reject("No token provided");
+        return;
       }
+      const userData = jwt.verify(token, process.env.JWT_SECRET);
+      resolve(userData);
     } catch (error) {
-      console.log("error in get user from request", error);
-      // res.status(403).json({error})
+      console.log("Error in getUserDataFromReq:", error);
       reject("Auth error");
     }
   });
