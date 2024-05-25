@@ -40,11 +40,7 @@ mongoose.connect(process.env.MONGO_URL);
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
     try {
-      const userData = jwt.verify(
-        req.cookies.token,
-        process.env.JWT_SECRET,
-        {}
-      );
+      const userData = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
       if (userData) {
         resolve(userData);
       }
