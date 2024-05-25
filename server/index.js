@@ -30,10 +30,6 @@ const corsOption = {
   origin: process.env.APP_URL,
 };
 app.use(cors(corsOption));
-const token = jwt.sign({ _id: user_id }, process.env.JWT_SECRET, {
-  expiresIn: "7d",
-});
-res.cookie("token", token, { httpOnly: true });
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
@@ -92,10 +88,10 @@ app.post("/login", async (req, res) => {
             id: userDoc._id,
           },
           process.env.JWT_SECRET,
-          {},
+
           (err, token) => {
             if (err) throw err;
-            res.cookie("token", token).json(userDoc);
+            res.cookie("token", token, { httpOnly: true }).json(userDoc);
           }
         );
       } else {
