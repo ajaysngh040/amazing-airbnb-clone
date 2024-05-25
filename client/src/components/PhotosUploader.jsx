@@ -23,7 +23,7 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
       data.append("photos", files[i]);
     }
     axios
-      .post("/upload", data, {
+      .post("/uploads", data, {
         headers: { "Content-type": "multipart/form-data" },
       })
       .then((response) => {
