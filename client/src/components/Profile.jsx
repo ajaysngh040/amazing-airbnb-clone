@@ -8,9 +8,15 @@ export default function Profile() {
   const [redirect, setRedirect] = useState(null);
 
   async function logout() {
-    await axios.post("/logout");
-    setUser(null);
-    setRedirect("/");
+    try {
+      const response = await axios.post("/logout");
+      if (response.status == 200) {
+        setUser(null);
+        setRedirect("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   if (!ready) {

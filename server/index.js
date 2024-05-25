@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const corsOption = {
-  credentials: true,
+  withcredentials: true,
   origin: process.env.APP_URL,
 };
 app.use(cors(corsOption));
@@ -76,7 +76,6 @@ function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
     try {
       const userData = jwt.verify(req.cookies.token, jwtSecret, {});
-      console.log("userData", userData);
       if (userData) {
         resolve(userData);
       }
@@ -89,9 +88,8 @@ function getUserDataFromReq(req) {
 }
 
 app.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
-
   try {
+    const { name, email, password } = req.body;
     const userDoc = await User.create({
       name,
       email,
@@ -227,10 +225,14 @@ app.post("/places", (req, res) => {
 app.get("/user-places", (req, res) => {
   try {
     const { token } = req.cookies;
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-      const { id } = userData;
-      res.json(await Place.find({ owner: id }));
-    });
+    if (token) {
+      jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (userData) {
+          const { id } = userData;
+          res.json(await Place.find({ owner: id }));
+        }
+      });
+    }
   } catch (error) {
     console.log("Error in user-places api", error);
   }

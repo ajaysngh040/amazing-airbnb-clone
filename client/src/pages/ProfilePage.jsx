@@ -4,7 +4,7 @@ import PlacesPage from "./PlacesPage";
 import AccountNav from "../components/AccountNav";
 import Profile from "../components/Profile";
 
-export default function HelpCenter() {
+export default function ProfilePage() {
   let { subpage } = useParams();
 
   return (

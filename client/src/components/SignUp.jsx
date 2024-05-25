@@ -1,23 +1,27 @@
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import Axios from "axios";
+import { Link, useHistory } from "react-router-dom";
+
+import axios from "axios";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState("");
+
+  const history = useHistory();
 
   async function registerUser(ev) {
     ev.preventDefault();
 
     try {
-      await Axios.post("/register", {
+      const response = await axios.post("/register", {
         name,
         email,
         password,
       });
-      setRedirect("");
+      if (response.status === 200) {
+        history.push("/login");
+      }
 
       alert("Registration successfull");
     } catch (e) {
@@ -25,9 +29,6 @@ export default function SignUp() {
     }
   }
 
-  if (redirect) {
-    <Navigate to={"/login"} />;
-  }
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-32">
