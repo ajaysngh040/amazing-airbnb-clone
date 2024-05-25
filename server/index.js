@@ -301,11 +301,12 @@ app.post("/bookings", async (req, res) => {
 app.get("/bookings", async (req, res) => {
   try {
     const userData = await getUserDataFromReq(req);
-    res
-      .status(200)
-      .json(await Booking.find({ user: userData.id }).populate("place"));
+    const bookings = await Booking.find({ user: userData.id }).populate(
+      "place"
+    );
+    res.status(200).json(bookings);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: error.toString() });
   }
 });
 // Start the server
