@@ -102,7 +102,13 @@ app.post("/login", async (req, res) => {
         process.env.JWT_SECRET,
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token, { httpOnly: true }).json(userDoc);
+          res
+            .cookie("token", token, {
+              httpOnly: true,
+              secure: true,
+              sameSite: "None",
+            })
+            .json(userDoc);
         }
       );
     } else {

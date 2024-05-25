@@ -12,7 +12,9 @@ export default function PlacesPage() {
   useEffect(() => {
     const fetchUserPlaces = async () => {
       try {
-        const response = await axios.get("/user-places");
+        const response = await axios.get("/user-places", {
+          withCredentials: true, // Ensure credentials are included in requests
+        });
         setPlaces(response.data);
       } catch (err) {
         console.error("Error fetching user places:", err);

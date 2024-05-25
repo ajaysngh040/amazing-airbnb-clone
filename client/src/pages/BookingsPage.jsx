@@ -13,7 +13,9 @@ export default function BookingsPage() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get("/bookings");
+        const response = await axios.get("/bookings", {
+          withCredentials: true, // Ensure credentials are included in requests
+        });
         setBookings(response.data);
       } catch (err) {
         console.error("Error fetching bookings:", err);
