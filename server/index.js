@@ -19,7 +19,6 @@ require("dotenv").config();
 // Create an Express application
 const app = express();
 const bcryptSalt = bcrypt.genSaltSync(12);
-const jwtSecret = "wekcjoicoam9cialcqa4scdm5";
 
 // Middleware to parse JSON request bodies
 
@@ -27,46 +26,16 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 const corsOption = {
-  withcredentials: true,
+  credentials: true,
   origin: process.env.APP_URL,
 };
 app.use(cors(corsOption));
+const token = jwt.sign({ _id: user_id }, process.env.JWT_SECRET, {
+  expiresIn: "7d",
+});
+res.cookie("token", token, { httpOnly: true });
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
-console.log(process.env.APP_URL);
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", process.env.APP_URL);
-
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
-//   );
-//   res.setHeader("Access-Control-Allow-Credentials", true);
-//   res.setHeader("Access-Control-Allow-Private-Network", true);
-//   //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
-//   res.setHeader("Access-Control-Max-Age", 7200);
-
-//   next();
-// });
-
-// Set preflight
-// app.options(process.env.APP_URL, (req, res) => {
-//   console.log("preflight");
-//   if (
-//     req.headers.origin === process.env.APP_URL &&
-//     allowMethods.includes(req.headers["access-control-request-method"]) &&
-//     allowHeaders.includes(req.headers["access-control-request-headers"])
-//   ) {
-//     console.log("pass");
-//     return res.status(204).send();
-//   } else {
-//     console.log("fail");
-//   }
-// });
 
 mongoose.connect(process.env.MONGO_URL);
 
@@ -75,7 +44,11 @@ mongoose.connect(process.env.MONGO_URL);
 function getUserDataFromReq(req) {
   return new Promise((resolve, reject) => {
     try {
-      const userData = jwt.verify(req.cookies.token, jwtSecret, {});
+      const userData = jwt.verify(
+        req.cookies.token,
+        process.env.JWT_SECRET,
+        {}
+      );
       if (userData) {
         resolve(userData);
       }
@@ -118,7 +91,7 @@ app.post("/login", async (req, res) => {
             email: userDoc.email,
             id: userDoc._id,
           },
-          jwtSecret,
+          process.env.JWT_SECRET,
           {},
           (err, token) => {
             if (err) throw err;
@@ -139,7 +112,7 @@ app.get("/profile", (req, res) => {
   if (token) {
     try {
     } catch (error) {}
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
       if (err) throw err;
       const { name, email, _id } = await User.findById(userData.id);
       res.json({ name, email, _id });
@@ -200,7 +173,7 @@ app.post("/places", (req, res) => {
       checkOut,
       maxGuests,
     } = req.body;
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
       if (err) throw err;
       const placeDoc = await Place.create({
         owner: userData.id,
@@ -226,7 +199,7 @@ app.get("/user-places", (req, res) => {
   try {
     const { token } = req.cookies;
     if (token) {
-      jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
         if (userData) {
           const { id } = userData;
           res.json(await Place.find({ owner: id }));
@@ -263,7 +236,7 @@ app.put("/places", async (req, res) => {
       maxGuests,
       price,
     } = req.body;
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
       if (err) throw err;
       const placeDoc = await Place.findById(id);
       if (userData.id === placeDoc.owner.toString()) {
