@@ -272,6 +272,26 @@ app.get("/bookings", async (req, res) => {
   }
 });
 
+app.delete("/places/:id", async (req, res) => {
+  try {
+    const userData = await getUserDataFromReq(req);
+    const placeId = req.params.id;
+
+    // Find the place and ensure it belongs to the current user
+    const place = await Place.findById(placeId);
+    if (!place || place.owner.toString() !== userData.id) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to delete this place." });
+    }
+
+    await Place.findByIdAndDelete(placeId);
+    res.status(200).json({ message: "Place deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting place:", error);
+    res.status(500).json({ error: "Failed to delete place." });
+  }
+});
 // Start the server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
