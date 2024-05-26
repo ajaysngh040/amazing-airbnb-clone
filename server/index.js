@@ -32,29 +32,6 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL);
 
-// Utility function to get user data from JWT token in cookies
-// function getUserDataFromReq(req) {
-//   return new Promise((resolve, reject) => {
-//     try {
-//       const token = req.cookies.token;
-//       if (!token) {
-//         return reject("No token provided"); // Reject if no token is found
-//       }
-
-//       jwt.verify(token, process.env.JWT_SECRET, (error, userData) => {
-//         if (error) {
-//           console.error("Error in verifying token:", error);
-//           return reject("Auth error"); // Reject if token verification fails
-//         }
-//         resolve(userData); // Resolve with user data if verification is successful
-//       });
-//     } catch (error) {
-//       console.error("Unexpected error in getUserDataFromReq:", error);
-//       reject("Unexpected auth error"); // Catch unexpected errors
-//     }
-//   });
-// }
-
 function getUserDataFromReq(req) {
   try {
     const token = req.cookies.token;
@@ -74,15 +51,14 @@ function getUserDataFromReq(req) {
 app.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
+    const hashedPassword = bcrypt.hash(password, bcryptSalt);
     const userDoc = await User.create({
       name,
       email,
       password: hashedPassword,
     });
-    res.status(201).json(userDoc);
+    res.status(200).json(userDoc);
   } catch (error) {
-    console.error(`Error in register: ${error}`);
     res.status(422).json({ error: "Unable to register" });
   }
 });
