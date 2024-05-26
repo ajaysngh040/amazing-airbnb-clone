@@ -20,10 +20,12 @@ export default function LogIn() {
         setUser(response.data);
         toast.success("Welcome back! You’ve successfully logged in.", {
           onClose: () => setRedirect(true),
+          position: "bottom-right",
+          style: { zIndex: 9999 },
         });
       }
     } catch (e) {
-      toast.error("Login failed");
+      toast.error("Login failed", { position: "bottom-right" });
     }
   }
 
@@ -63,7 +65,7 @@ export default function LogIn() {
             </Link>
           </div>
         </form>
-        <ToastContainer />
+        <ToastContainer position="bottom-right" />
       </div>
     </div>
   );

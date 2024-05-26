@@ -20,12 +20,16 @@ export default function SignUp() {
         password,
       });
       if (response.status === 200) {
-        toast.success("Registration successful! Redirecting to login page...", {
+        toast.success("Registration successful! Redirecting to home page...", {
           onClose: () => setRedirect(true),
+          position: "bottom-right",
+          style: { zIndex: 9999 },
         });
       }
     } catch (e) {
-      toast.error("Registration failed. Please try again later.");
+      toast.error("Registration failed. Please try again later.", {
+        position: "bottom-right",
+      });
     }
   }
 
@@ -67,7 +71,7 @@ export default function SignUp() {
             </Link>
           </div>
         </form>
-        <ToastContainer />
+        <ToastContainer position="bottom-right" />
       </div>
     </div>
   );

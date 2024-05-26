@@ -16,10 +16,14 @@ export default function Profile() {
         setUser(null);
         toast.success("You’ve successfully logged out.", {
           onClose: () => setRedirect(true),
+          position: "bottom-right",
+          style: { zIndex: 9999 },
         });
       }
     } catch (error) {
-      toast.error("Logout failed.");
+      toast.error("Logout failed. Please try again later..", {
+        position: "bottom-right",
+      });
     }
   }
 
@@ -44,7 +48,7 @@ export default function Profile() {
       >
         Logout
       </button>
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
     </div>
   );
 }
