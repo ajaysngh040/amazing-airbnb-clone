@@ -2,21 +2,29 @@ import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Profile() {
   const { ready, user, setUser } = useContext(UserContext);
-  const [redirect, setRedirect] = useState(null);
+  const [redirect, setRedirect] = useState(false);
 
   async function logout() {
     try {
       const response = await axios.post("/logout");
-      if (response.status == 200) {
+      if (response.status === 200) {
         setUser(null);
-        setRedirect("/");
+        toast.success("You’ve successfully logged out.", {
+          onClose: () => setRedirect(true),
+        });
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Logout failed.");
     }
+  }
+
+  if (redirect) {
+    return <Navigate to="/" />;
   }
 
   if (!ready) {
@@ -24,21 +32,19 @@ export default function Profile() {
   }
 
   if (ready && !user && !redirect) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to="/login" />;
   }
 
-  if (redirect) {
-    return <Navigate to={redirect} />;
-  }
   return (
     <div className="text-center max-w-lg mx-auto mt-8 text-sm font-medium">
       Logged in as {user.name} ({user.email})<br />
       <button
         onClick={logout}
-        className="primary mt-4 max-w-sm  text-sm font-medium"
+        className="primary mt-4 max-w-sm text-sm font-medium"
       >
         Logout
       </button>
+      <ToastContainer />
     </div>
   );
 }

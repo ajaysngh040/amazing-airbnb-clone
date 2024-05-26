@@ -2,41 +2,44 @@ import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState("");
+  const [redirect, setRedirect] = useState(false);
   const { user, setUser } = useContext(UserContext);
 
   async function handleLoginSubmit(ev) {
     ev.preventDefault();
+
     try {
       const response = await axios.post("/login", { email, password });
       if (response.status === 200) {
         setUser(response.data);
-        setRedirect("/");
-        alert("Login successful");
+        toast.success("Welcome back! You’ve successfully logged in.", {
+          onClose: () => setRedirect(true),
+        });
       }
     } catch (e) {
-      alert("Login failed");
+      toast.error("Login failed");
     }
   }
 
-  if (!user && !redirect) {
-    <Navigate to={"/login"} />;
-  } else {
-    return <Navigate to={"/"} />;
+  if (redirect) {
+    return <Navigate to="/" />;
   }
+
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-32">
         <h1 className="text-lg font-medium text-center mb-4">Login</h1>
-        <form
-          action=""
-          onSubmit={handleLoginSubmit}
-          className="max-w-md mx-auto"
-        >
+        <form onSubmit={handleLoginSubmit} className="max-w-md mx-auto">
           <input
             type="email"
             placeholder="your@email.com"
@@ -60,6 +63,7 @@ export default function LogIn() {
             </Link>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </div>
   );

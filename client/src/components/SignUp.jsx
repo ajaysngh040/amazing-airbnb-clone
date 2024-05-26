@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   async function registerUser(ev) {
     ev.preventDefault();
@@ -19,26 +20,27 @@ export default function SignUp() {
         password,
       });
       if (response.status === 200) {
-        setRedirect("/login");
+        toast.success("Registration successful! Redirecting to login page...", {
+          onClose: () => setRedirect(true),
+        });
       }
-
-      alert("Registration successfull");
     } catch (e) {
-      alert("Registration failed. Please try again later");
+      toast.error("Registration failed. Please try again later.");
     }
   }
 
   if (redirect) {
-    <Navigate to={redirect} />;
+    return <Navigate to="/login" />;
   }
+
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-32">
         <h1 className="text-lg font-medium text-center mb-4">Register</h1>
-        <form action="" onSubmit={registerUser} className="max-w-md mx-auto">
+        <form onSubmit={registerUser} className="max-w-md mx-auto">
           <input
             type="text"
-            placeholder="John doe"
+            placeholder="John Doe"
             value={name}
             onChange={(ev) => setName(ev.target.value)}
           />
@@ -55,16 +57,17 @@ export default function SignUp() {
             onChange={(ev) => setPassword(ev.target.value)}
           />
           <button className="primary text-sm font-medium mt-2">Register</button>
-          <div className="text-center py-2 text-sm font-light">
+          <div className="text-center text-sm font-light py-2">
             Already a member?{" "}
             <Link
               to={"/login"}
-              className="text-sm font-light hover:font-medium underline text"
+              className="text-sm font-light underline text hover:font-medium"
             >
               Login
             </Link>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </div>
   );
