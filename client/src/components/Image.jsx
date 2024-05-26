@@ -10,11 +10,8 @@ export default function Image({ src, alt = "", ...rest }) {
   }
 
   // Handle cases where src is undefined or null
-  const resolvedSrc = src
-    ? src.includes("https://")
-      ? src
-      : `${baseUrl}/uploads/${src}`
-    : null;
+  const resolvedSrc =
+    src && src.includes("https://") ? src : `${baseUrl}/uploads/${src}`;
 
   // If resolvedSrc is null, render nothing or a placeholder
   if (!resolvedSrc) {
