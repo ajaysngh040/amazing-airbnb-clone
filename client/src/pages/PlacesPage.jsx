@@ -27,6 +27,19 @@ export default function PlacesPage() {
     fetchUserPlaces();
   }, []);
 
+  const handleDelete = async (placeId) => {
+    try {
+      await axios.delete(`/places/${placeId}`, {
+        withCredentials: true,
+      });
+      // Remove the deleted place from the state
+      setPlaces(places.filter((place) => place._id !== placeId));
+    } catch (err) {
+      console.error("Error deleting place:", err);
+      setError("Failed to delete place.");
+    }
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -34,6 +47,7 @@ export default function PlacesPage() {
   if (error) {
     return <p>{error}</p>;
   }
+
   return (
     <div className="relative">
       <AccountNav />
@@ -58,11 +72,11 @@ export default function PlacesPage() {
           Add new places
         </Link>
       </div>
+
       <div className="mt-4">
         {places.map((place) => (
-          <Link
+          <div
             key={place._id}
-            to={"/account/places/" + place._id}
             className="flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl mb-4 hover:bg-gray-200"
           >
             <div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
@@ -73,8 +87,22 @@ export default function PlacesPage() {
                 {place.title}, {place.address}
               </h2>
               <p className="text-sm font-light mt-2">{place.description}</p>
+              <div className="flex mt-2">
+                <Link
+                  to={"/account/places/" + place._id}
+                  className="bg-blue-500 text-white text-sm font-medium py-2 px-4 rounded-md mr-2"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => handleDelete(place._id)}
+                  className="bg-red-500 text-white text-sm font-medium py-2 px-4 rounded-md"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>
