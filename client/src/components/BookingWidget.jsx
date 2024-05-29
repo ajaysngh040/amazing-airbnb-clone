@@ -4,6 +4,7 @@ import { differenceInCalendarDays } from "date-fns";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function BookingWidget({ place }) {
   const [checkIn, setCheckIn] = useState("");
@@ -29,6 +30,21 @@ export default function BookingWidget({ place }) {
   }
 
   async function bookThisPlace() {
+    if (!user) {
+      // User is not logged in, you can redirect them to the login page or display a message
+      // For simplicity, let's just console log a message
+      setRedirect("/login");
+      toast.success(
+        "User is not logged in. Please log in to proceed with booking.",
+        {
+          onClose: () => setRedirect(true),
+          position: "bottom-right",
+          style: { zIndex: 9999 },
+        }
+      );
+      return;
+    }
+
     const response = await axios.post("/bookings", {
       checkIn,
       checkOut,
@@ -99,6 +115,7 @@ export default function BookingWidget({ place }) {
         Book this place
         {numberOfNights > 0 && <span> ${numberOfNights * place.price}</span>}
       </button>
+      <ToastContainer position="bottom-right" />
     </div>
   );
 }
