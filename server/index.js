@@ -269,7 +269,7 @@ app.delete("/places/:id", async (req, res) => {
   }
 });
 // Start the server
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 app.listen(PORT, () => {
-  console.log(`Server running on ${process.env.APP_URL}:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
