@@ -3,6 +3,7 @@ import AccountNav from "../components/AccountNav";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import PlaceImg from "../components/PlaceImg";
+import { Skeleton } from "antd";
 
 export default function PlacesPage() {
   const [places, setPlaces] = useState([]);
@@ -41,7 +42,7 @@ export default function PlacesPage() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Skeleton />;
   }
 
   if (error) {

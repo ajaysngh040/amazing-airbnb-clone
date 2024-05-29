@@ -20,7 +20,7 @@ export default function SignUp() {
         password,
       });
       if (response.status === 200) {
-        toast.success("Registration successful! Redirecting to home page...", {
+        toast.success("Registration successful! Redirecting to login page...", {
           onClose: () => setRedirect(true),
           position: "bottom-right",
           style: { zIndex: 9999 },

@@ -4,6 +4,7 @@ import axios from "axios";
 import PlaceImg from "../components/PlaceImg";
 import { Link } from "react-router-dom";
 import BookingDates from "../components/BookingDates";
+import { Skeleton } from "antd";
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState([]);
@@ -29,7 +30,7 @@ export default function BookingsPage() {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Skeleton />;
   }
 
   if (error) {

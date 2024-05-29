@@ -159,7 +159,7 @@ export default function Header() {
         <div className="flex justify-center items-center gap-2">
           <span className="flex justify-center items-center rounded-full hover:bg-gray-100 py-3 px-4">
             <a
-              href="/airbnbyourhome"
+              href="#"
               className="text-sm font-medium hidden xl:block truncate ..."
             >
               Airbnb your home

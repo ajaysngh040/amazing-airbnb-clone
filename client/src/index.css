@@ -37,3 +37,7 @@ button {
 button.primary {
   @apply bg-primary p-2 w-full text-white rounded-lg text-sm font-medium hover:bg-secondary;
 }
+
+.ant-tabs-nav-more {
+  display: none;
+}
