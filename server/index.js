@@ -237,7 +237,7 @@ app.get("/bookings", async (req, res) => {
     if (!userData) {
       return res.status(403).json({ error: "Invalid token or user not found" });
     }
-    console.log("User Data:", userData); // Log user data for debugging
+    // console.log("User Data:", userData); // Log user data for debugging
     const bookings = await Booking.find({ user: userData.id }).populate(
       "place"
     );
