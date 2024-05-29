@@ -12,12 +12,6 @@ function Footer() {
         <p>·</p>
         <p>Company details</p>
       </div>
-      {/* <div className="flex space-x-4 text-sm font-base mr-20">
-        <span className="material-symbols-outlined">Language</span>
-        <p>English(IN)</p>
-        <p>₹ INR</p>
-        <p>Support</p>
-      </div> */}
     </footer>
   );
 }
