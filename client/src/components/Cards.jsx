@@ -24,8 +24,8 @@ export default function IndexPage() {
                 <ImageWithSkeleton
                   src={place.photos[0]}
                   alt=""
-                  maxHeight={200}
-                  maxWidth={300}
+                  height={200}
+                  width={300}
                 />
               )}
             </div>
