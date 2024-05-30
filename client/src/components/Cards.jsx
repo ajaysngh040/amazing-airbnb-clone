@@ -19,15 +19,24 @@ export default function IndexPage() {
       <div className="mt-24 sm:mt-1/4 mb-12 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 relative lg:gap-4 md:gap-5 sm:gap-3 px-2">
         {places.map((place) => (
           <Link to={"/place/" + place._id} key={place._id}>
-            <div className="bg-gray-500 mb-2 rounded-xl flex justify-center items-center">
+            <div className="bg-transparent mb-2 rounded-xl flex justify-center items-center">
               {place.photos?.[0] && (
-                <ImageWithSkeleton src={place.photos[0]} alt="" />
+                <ImageWithSkeleton
+                  src={place.photos[0]}
+                  alt=""
+                  maxHeight={200}
+                  maxWidth={300}
+                />
               )}
             </div>
             <div className="flex justify-between mt-2">
-              <p className="text-sm font-medium">
-                {place.title}, {place.address}
-              </p>
+              {place.title && place.address == null ? (
+                <Skeleton.Input style={{ width: 200 }} />
+              ) : (
+                <p className="text-sm font-medium">
+                  {place.title}, {place.address}
+                </p>
+              )}
               <div className="flex justify-center items-center gap-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -44,11 +53,15 @@ export default function IndexPage() {
                 <p className="text-sm font-light">5.0</p>
               </div>
             </div>
-            <div className="mt-1">
-              <p className="gray-text">63 kilometers away</p>
-              <p className="gray-text">22-27 Jul</p>
-              <span className="font-base">${place.price}</span> per night
-            </div>
+            {place.price == null ? (
+              <Skeleton.Input style={{ width: 100 }} />
+            ) : (
+              <div className="mt-1">
+                <p className="gray-text">63 kilometers away</p>
+                <p className="gray-text">22-27 Jul</p>
+                <span className="font-base">${place.price}</span> per night
+              </div>
+            )}
           </Link>
         ))}
       </div>
@@ -56,7 +69,7 @@ export default function IndexPage() {
   );
 }
 
-function ImageWithSkeleton({ src, alt }) {
+function ImageWithSkeleton({ src, alt, height, width }) {
   const [loading, setLoading] = useState(true);
 
   const handleImageLoaded = () => {
@@ -64,14 +77,15 @@ function ImageWithSkeleton({ src, alt }) {
   };
 
   return (
-    <>
-      {loading && <Skeleton.Image />}
+    <div style={{ height, width }} className="relative">
+      {loading && <Skeleton.Image style={{ height, width }} />}
       <Image
         className={`rounded-xl object-cover ${loading ? "hidden" : ""}`}
         src={src}
         alt={alt}
+        style={{ height, width }}
         onLoad={handleImageLoaded}
       />
-    </>
+    </div>
   );
 }
