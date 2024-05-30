@@ -39,7 +39,7 @@ export default function BookingWidget({ place }) {
         {
           onClose: () => setRedirect(true),
           position: "bottom-right",
-          style: { zIndex: 9999 },
+          style: { zIndex: 49 },
         }
       );
       return;
@@ -63,7 +63,7 @@ export default function BookingWidget({ place }) {
   }
 
   return (
-    <div className="bg-white shadow p-4 rounded-2xl">
+    <div className="bg-white shadow p-4 rounded-2xl mx-auto">
       <div className="text-md font-medium text-center">
         Price: ${place.price} / per night
       </div>

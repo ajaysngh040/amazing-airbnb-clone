@@ -16,9 +16,9 @@ export default function IndexPage() {
 
   return (
     <>
-      <div className="mt-24 sm:mt-1/4 mb-12 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 relative lg:gap-4 md:gap-5 sm:gap-3 px-2">
+      <div className="mt-24 sm:mt-1/4 mb-12 grid sx:grid-col-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 relative lg:gap-4 md:gap-5 sm:gap-3 px-2 mx-auto">
         {places.map((place) => (
-          <Link to={"/place/" + place._id} key={place._id}>
+          <Link to={"/place/" + place._id} key={place._id} className="p-2">
             <div className="bg-transparent mb-2 rounded-xl flex justify-center items-center">
               {place.photos?.[0] && (
                 <ImageWithSkeleton
