@@ -34,13 +34,9 @@ exports.login = async (req, res) => {
 
     res
       .cookie("token", token, {
-        httpOnly: true, // Prevent client-side JS from accessing the cookie
-        secure: process.env.NODE_ENV === production, // Enable HTTPS only in production
-        sameSite: process.env.NODE_ENV === production ? None : Lax, // Set SameSite None in production
-        domain:
-          process.env.NODE_ENV === production
-            ? "https://amazing-airbnb-clone.vercel.app"
-            : undefined, // Domain only for production
+        httpOnly: true, // CHANGE THIS TO FALSE IN DEVELOPMENT
+        secure: false, // Set secure cookie in production
+        sameSite: "None", // SameSite None for cross-site in production
       })
       .json({ message: "Login successful" });
   } catch (error) {
