@@ -13,7 +13,7 @@ export default function PlacesPage() {
   useEffect(() => {
     const fetchUserPlaces = async () => {
       try {
-        const response = await axios.get("/user-places", {
+        const response = await axios.get("/places/", {
           withCredentials: true, // Ensure credentials are included in requests
         });
         setPlaces(response.data);
@@ -30,7 +30,7 @@ export default function PlacesPage() {
 
   const handleDelete = async (placeId) => {
     try {
-      await axios.delete(`/places/${placeId}`, {
+      await axios.delete(`/places/update/${placeId}`, {
         withCredentials: true,
       });
       // Remove the deleted place from the state

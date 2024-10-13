@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 export default function Header() {
-  const { user } = useContext(UserContext);
+  const { user, ready } = useContext(UserContext);
 
   return (
     <div className="">
@@ -74,9 +74,23 @@ export default function Header() {
                 />
               </svg>
             </div>
-            {!!user && (
+            {/* {!!user && (
               <div className="text-xs font-medium mr-2 truncate ...">
                 {user.name}
+              </div>
+            )} */}
+
+            {ready ? (
+              user ? (
+                <div className="text-xs font-medium mr-2 truncate">
+                  {user.name}
+                </div>
+              ) : (
+                <div className="text-xs font-medium mr-2 truncate">Guest</div>
+              )
+            ) : (
+              <div className="text-xs font-medium mr-2 truncate">
+                Loading...
               </div>
             )}
           </Link>

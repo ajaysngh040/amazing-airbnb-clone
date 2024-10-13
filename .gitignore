@@ -32,7 +32,7 @@ server/dist-ssr
 
 #for server
 server/.env
-
+server/uploads
 
 
 

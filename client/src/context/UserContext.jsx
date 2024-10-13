@@ -1,34 +1,47 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { getCookie } from "../utilityFunction";
+import { getCookie } from "../utilityFunction"; // Assuming this function retrieves cookies correctly
 
-// Create the UserContext
+// Create UserContext with default value as an empty object
 export const UserContext = createContext({});
 
+// UserContextProvider component to wrap around children components
 // eslint-disable-next-line react/prop-types
 export function UserContextProvider({ children }) {
-  const [user, setUser] = useState(null); // User state
-  const [ready, setReady] = useState(false); // Ready state to indicate data is fetched
+  const [user, setUser] = useState(null); // To store user data
+  const [ready, setReady] = useState(false); // To indicate if data is ready
 
   useEffect(() => {
-    try {
-      const token = getCookie("token"); // Get token from cookies
-      if (token) {
-        axios
-          .get("/profile", { headers: { Authorization: `Bearer ${token}` } }) // Set token in headers for request
-          .then(({ data }) => {
-            setUser(data); // Set user data in state
-            setReady(true); // Set ready state to true
-          })
-          .catch((error) => {
-            console.log("Error fetching profile data:", error);
-            setReady(true); // Even on error, set ready to true to end loading state
+    const token = getCookie("token"); // Retrieve token from cookies
+
+    if (!token) {
+      // If no token, skip the Axios call and directly set user to null
+      setUser(null);
+      setReady(true); // Mark ready since there's no token
+    } else {
+      // If token is present, fetch user profile
+      const fetchProfile = async () => {
+        try {
+          const { data } = await axios.get("/auth/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in request headers
+            },
           });
-      } else {
-        setReady(true); // If no token, set ready to true
-      }
-    } catch (error) {
-      console.log(error.response.data);
+
+          if (data) {
+            setUser(data); // Set user data if fetched successfully
+          } else {
+            setUser(null); // If no data returned, set user to null
+          }
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+          setUser(null); // In case of error, set user to null
+        } finally {
+          setReady(true); // Set ready to true regardless of success or error
+        }
+      };
+
+      fetchProfile(); // Call the async function to fetch profile
     }
   }, []);
 
