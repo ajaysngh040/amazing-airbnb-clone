@@ -15,7 +15,7 @@ export default function LogIn() {
     ev.preventDefault();
 
     try {
-      const response = await axios.post("/login", { email, password });
+      const response = await axios.post("/auth/login", { email, password });
       if (response.status === 200) {
         setUser(response.data);
         toast.success("Welcome back! You’ve successfully logged in.", {
