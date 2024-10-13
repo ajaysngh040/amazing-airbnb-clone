@@ -36,7 +36,7 @@ app.use("/bookings", bookingRoutes); // booking routes
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Use the upload routes
-app.use("/uploads", uploadRoutes); // Prefixing routes with /api for better organization
+app.use("/uploads", uploadRoutes); // Prefixing routes with /api for better
 
 // Error handling
 app.use(errorHandler);
