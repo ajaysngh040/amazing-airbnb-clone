@@ -16,7 +16,7 @@ connectDB();
 // Set up CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL && process.env.DEV_URL, // You can specify allowed domains here or use '*' for all domains
+    origin: process.env.DEV_URL, // You can specify allowed domains here or use '*' for all domains
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
     credentials: true,
