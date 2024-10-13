@@ -35,8 +35,8 @@ exports.login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "None",
+        secure: process.env.NODE_ENV === "production", // Set secure cookie in production
+        sameSite: "None", // SameSite None for cross-site in production
       })
       .json({ message: "Login successful" });
   } catch (error) {

@@ -11,7 +11,7 @@ export default function Profile() {
 
   async function logout() {
     try {
-      const response = await axios.post("/auth/logout");
+      const response = await axios.post("/logout");
       if (response.status === 200) {
         setUser(null);
         toast.success("You’ve successfully logged out.", {

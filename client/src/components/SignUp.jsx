@@ -14,7 +14,7 @@ export default function SignUp() {
     ev.preventDefault();
 
     try {
-      const response = await axios.post("/auth/register", {
+      const response = await axios.post("/register", {
         name,
         email,
         password,

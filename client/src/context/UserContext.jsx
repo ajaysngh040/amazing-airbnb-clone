@@ -22,7 +22,7 @@ export function UserContextProvider({ children }) {
       // If token is present, fetch user profile
       const fetchProfile = async () => {
         try {
-          const { data } = await axios.get("/auth/profile", {
+          const { data } = await axios.get("/profile", {
             headers: {
               Authorization: `Bearer ${token}`, // Include the token in request headers
             },

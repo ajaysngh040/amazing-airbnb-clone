@@ -16,7 +16,7 @@ connectDB();
 // Set up CORS
 app.use(
   cors({
-    origin: process.env.APP_URL_DEV || process.env.APP_URL, // You can specify allowed domains here or use '*' for all domains
+    origin: process.env.DEV_URL || process.env.CLIENT_URL, // You can specify allowed domains here or use '*' for all domains
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
     credentials: true,
@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use("/auth", authRoutes); // auth routes
+app.use("/", authRoutes); // auth routes
 app.use("/places", placeRoutes); // places routes
 app.use("/bookings", bookingRoutes); // booking routes
 
