@@ -39,6 +39,7 @@ exports.login = async (req, res) => {
         httpOnly: true, // CHANGE THIS TO FALSE IN DEVELOPMENT
         secure: true,
         sameSite: "None", // SameSite None for cross-site in production
+        domain: process.env.CLIENT_URL, // Set domain in production
       })
       .json({
         message: "Login successful",
