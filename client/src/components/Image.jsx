@@ -2,7 +2,7 @@
 
 export default function Image({ src, alt = "", ...rest }) {
   // Ensure that VITE_BASE_API_URL is defined
-  const baseUrl = import.meta.env.VITE_DEV_URL;
+  const baseUrl = import.meta.env.VITE_DEV_URL || import.meta.env.VITE_PROD_URL;
 
   if (!baseUrl) {
     console.error("VITE_BASE_API_URL is not defined");
