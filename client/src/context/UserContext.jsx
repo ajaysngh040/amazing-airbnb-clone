@@ -1,47 +1,36 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { getCookie } from "../utilityFunction"; // Assuming this function retrieves cookies correctly
+import Cookies from "js-cookie"; // Import js-cookie
 
-// Create UserContext with default value as an empty object
 export const UserContext = createContext({});
 
-// UserContextProvider component to wrap around children components
 // eslint-disable-next-line react/prop-types
 export function UserContextProvider({ children }) {
-  const [user, setUser] = useState(null); // To store user data
-  const [ready, setReady] = useState(false); // To indicate if data is ready
+  const [user, setUser] = useState(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const token = getCookie("token"); // Retrieve token from cookies
+    const token = Cookies.get("token"); // Use js-cookie to get the token
 
-    if (!token) {
-      // If no token, skip the Axios call and directly set user to null
-      setUser(null);
-      setReady(true); // Mark ready since there's no token
-    } else {
-      // If token is present, fetch user profile
+    if (token) {
       const fetchProfile = async () => {
         try {
           const { data } = await axios.get("/auth/profile", {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include the token in request headers
-            },
+            headers: { Authorization: `Bearer ${token}` }, // Send token in headers if needed
           });
-
-          if (data) {
-            setUser(data); // Set user data if fetched successfully
-          } else {
-            setUser(null); // If no data returned, set user to null
-          }
+          setUser(data);
         } catch (error) {
           console.error("Error fetching profile:", error);
-          setUser(null); // In case of error, set user to null
+          setUser(null);
         } finally {
-          setReady(true); // Set ready to true regardless of success or error
+          setReady(true);
         }
       };
 
-      fetchProfile(); // Call the async function to fetch profile
+      fetchProfile();
+    } else {
+      setReady(true);
+      setUser(null);
     }
   }, []);
 

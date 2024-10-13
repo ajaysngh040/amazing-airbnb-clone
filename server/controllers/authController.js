@@ -22,7 +22,9 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }); // Create a user object without the password
+
+    // const user = await User.findById(req.user.id).select("-password");
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -35,10 +37,13 @@ exports.login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true, // CHANGE THIS TO FALSE IN DEVELOPMENT
-        secure: false, // Set secure cookie in production
+        secure: true,
         sameSite: "None", // SameSite None for cross-site in production
       })
-      .json({ message: "Login successful" });
+      .json({
+        message: "Login successful",
+        user: { email: user.email, name: user.name },
+      });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
