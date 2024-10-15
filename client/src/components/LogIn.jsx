@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,8 +10,8 @@ export default function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
-  const [loading, setLoading] = useState(false); // Loading state for preventing multiple submissions
-  const { user, setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+  const { setUser } = useContext(UserContext); // Access setUser from context
 
   const validateForm = () => {
     if (!email || !password) {
@@ -35,20 +35,16 @@ export default function LogIn() {
       const { user } = response.data;
       const token = Cookies.get("token");
 
-      if (token) {
-        if (user) {
-          setUser(user); // Set user data in context
-          localStorage.setItem("user", JSON.stringify(user)); // Optionally: Store user in localStorage
-          Cookies.set("token", token, { path: "/" }); // Store token in cookies
-        } else {
-          console.log("cookie not found");
-        }
+      if (user) {
+        setUser(user); // Set user data in context
+        Cookies.set("token", token, { path: "/" }); // Store token in cookies
+        localStorage.setItem("user", JSON.stringify(user)); // Store user in localStorage
+        setRedirect(true);
+        toast.success("Welcome back! You’ve successfully logged in.", {
+          position: "bottom-right",
+          style: { zIndex: 9999 },
+        });
       }
-      setRedirect(true);
-      toast.success("Welcome back! You’ve successfully logged in.", {
-        position: "bottom-right",
-        style: { zIndex: 9999 },
-      });
     } catch (e) {
       if (e.response && e.response.status === 401) {
         toast.error("Invalid email or password.", { position: "bottom-right" });
@@ -57,14 +53,12 @@ export default function LogIn() {
           position: "bottom-right",
         });
       }
-      // Clear token if login fails
-      Cookies.remove("token");
     } finally {
       setLoading(false); // Stop loading
     }
   }
 
-  if (redirect || user) {
+  if (redirect) {
     return <Navigate to="/" />;
   }
 
@@ -94,15 +88,6 @@ export default function LogIn() {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-          <div className="text-center text-sm font-light py-2">
-            Don&apos;t have an account yet?{" "}
-            <Link
-              to={"/signup"}
-              className="text-sm font-light underline text hover:font-medium"
-            >
-              Register now
-            </Link>
-          </div>
         </form>
         <ToastContainer position="bottom-right" />
       </div>
