@@ -1,6 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import axios from "axios";
-import Cookies from "js-cookie"; // Import js-cookie
 
 export const UserContext = createContext({});
 
@@ -10,29 +8,15 @@ export function UserContextProvider({ children }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const token = Cookies.get("token"); // Get token from cookies
-
-    if (token) {
-      const fetchProfile = async () => {
-        try {
-          const { data } = await axios.get("/auth/profile", {
-            headers: { Authorization: `Bearer ${token}` }, // Send token in headers
-          });
-          setUser(data);
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-          setUser(null);
-          Cookies.remove("token"); // Remove token if profile fetching fails
-        } finally {
-          setReady(true);
-        }
-      };
-
-      fetchProfile();
-    } else {
-      setReady(true);
-      setUser(null); // Ensure user is null if no token found
-    }
+    const fetchUser = async () => {
+      // Example: Fetch from API or localStorage
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+      setReady(true); // Set ready after loading the user
+    };
+    fetchUser();
   }, []);
 
   return (

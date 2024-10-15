@@ -34,17 +34,24 @@ exports.login = async (req, res) => {
       expiresIn: "1d",
     });
 
-    res
-      .cookie("token", token, {
-        httpOnly: true, // CHANGE THIS TO FALSE IN DEVELOPMENT
-        secure: true,
-        sameSite: "None", // SameSite None for cross-site in production
-        domain: process.env.CLIENT_URL, // Set domain in production
-      })
-      .json({
-        message: "Login successful",
-        user: { email: user.email, name: user.name },
-      });
+    if (token) {
+      // res
+      //   .cookie("token", token, {
+      //     httpOnly: true, // CHANGE THIS TO FALSE IN DEVELOPMENT
+      //     secure: process.env.NODE_ENV === production,
+      //     sameSite: "None", // SameSite None for cross-site in production
+      //     domain: process.env.CLIENT_URL, // Set domain in production
+      //   })
+      res
+        .cookie("token", token)
+
+        .json({
+          message: "Login successful",
+          user: { email: user.email, name: user.name, id: user._id },
+        });
+    } else {
+      res.json({ message: "token not generated" });
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

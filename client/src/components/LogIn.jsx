@@ -32,17 +32,23 @@ export default function LogIn() {
 
     try {
       const response = await axios.post("/auth/login", { email, password });
-      const { token, user } = response.data;
+      const { user } = response.data;
+      const token = Cookies.get("token");
 
-      if (user) {
-        setUser(user); // Set user data in context
-        Cookies.set("token", token, { path: "/" }); // Store token
-        toast.success("Welcome back! You’ve successfully logged in.", {
-          onClose: () => setRedirect(true),
-          position: "bottom-right",
-          style: { zIndex: 9999 },
-        });
+      if (token) {
+        if (user) {
+          setUser(user); // Set user data in context
+          localStorage.setItem("user", JSON.stringify(user)); // Optionally: Store user in localStorage
+          Cookies.set("token", token, { path: "/" }); // Store token in cookies
+        } else {
+          console.log("cookie not found");
+        }
       }
+      setRedirect(true);
+      toast.success("Welcome back! You’ve successfully logged in.", {
+        position: "bottom-right",
+        style: { zIndex: 9999 },
+      });
     } catch (e) {
       if (e.response && e.response.status === 401) {
         toast.error("Invalid email or password.", { position: "bottom-right" });
