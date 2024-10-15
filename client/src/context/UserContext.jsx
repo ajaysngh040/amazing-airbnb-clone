@@ -10,19 +10,19 @@ export function UserContextProvider({ children }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const token = Cookies.get("token"); // Use js-cookie to get the token
+    const token = Cookies.get("token"); // Get token from cookies
 
     if (token) {
       const fetchProfile = async () => {
         try {
-          // const { data } = await axios.get("/auth/profile", {
-          //   headers: { Authorization: `Bearer ${token}` }, // Send token in headers if needed
-          // });
-          const { data } = await axios.get("/auth/profile");
+          const { data } = await axios.get("/auth/profile", {
+            headers: { Authorization: `Bearer ${token}` }, // Send token in headers
+          });
           setUser(data);
         } catch (error) {
           console.error("Error fetching profile:", error);
           setUser(null);
+          Cookies.remove("token"); // Remove token if profile fetching fails
         } finally {
           setReady(true);
         }
@@ -31,7 +31,7 @@ export function UserContextProvider({ children }) {
       fetchProfile();
     } else {
       setReady(true);
-      setUser(null);
+      setUser(null); // Ensure user is null if no token found
     }
   }, []);
 

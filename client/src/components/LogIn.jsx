@@ -13,7 +13,6 @@ export default function LogIn() {
   const [loading, setLoading] = useState(false); // Loading state for preventing multiple submissions
   const { user, setUser } = useContext(UserContext);
 
-  // Form validation
   const validateForm = () => {
     if (!email || !password) {
       toast.error("Email and password are required.", {
@@ -27,10 +26,7 @@ export default function LogIn() {
   async function handleLoginSubmit(ev) {
     ev.preventDefault();
 
-    // Form validation check
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true); // Start loading
 
@@ -38,18 +34,9 @@ export default function LogIn() {
       const response = await axios.post("/auth/login", { email, password });
       const { token, user } = response.data;
 
-      toast.success("Welcome back! You’ve successfully logged in.", {
-        onClose: () => setRedirect(true),
-        position: "bottom-right",
-        style: { zIndex: 9999 },
-      });
-
       if (user) {
-        setUser(user); // Set user data to context
-      }
-
-      if (token) {
-        Cookies.set("token", token, { path: "/profile" }); // Store token in cookies "/" for root & "/profile" for usercontext
+        setUser(user); // Set user data in context
+        Cookies.set("token", token, { path: "/" }); // Store token
         toast.success("Welcome back! You’ve successfully logged in.", {
           onClose: () => setRedirect(true),
           position: "bottom-right",
@@ -57,7 +44,6 @@ export default function LogIn() {
         });
       }
     } catch (e) {
-      // Check for specific error cases (e.g., invalid credentials)
       if (e.response && e.response.status === 401) {
         toast.error("Invalid email or password.", { position: "bottom-right" });
       } else {
@@ -65,12 +51,13 @@ export default function LogIn() {
           position: "bottom-right",
         });
       }
+      // Clear token if login fails
+      Cookies.remove("token");
     } finally {
-      setLoading(false); // Stop loading after response is received
+      setLoading(false); // Stop loading
     }
   }
 
-  // Redirect if user is already logged in
   if (redirect || user) {
     return <Navigate to="/" />;
   }
@@ -97,7 +84,7 @@ export default function LogIn() {
           <button
             className="primary text-sm font-medium mt-2"
             type="submit"
-            disabled={loading} // Disable button while loading
+            disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
