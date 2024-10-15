@@ -15,9 +15,10 @@ export function UserContextProvider({ children }) {
     if (token) {
       const fetchProfile = async () => {
         try {
-          const { data } = await axios.get("/auth/profile", {
-            headers: { Authorization: `Bearer ${token}` }, // Send token in headers if needed
-          });
+          // const { data } = await axios.get("/auth/profile", {
+          //   headers: { Authorization: `Bearer ${token}` }, // Send token in headers if needed
+          // });
+          const { data } = await axios.get("/auth/profile");
           setUser(data);
         } catch (error) {
           console.error("Error fetching profile:", error);

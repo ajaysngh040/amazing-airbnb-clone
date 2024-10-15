@@ -49,7 +49,7 @@ export default function LogIn() {
       }
 
       if (token) {
-        Cookies.set("token", token, { path: "/" }); // Store token in cookies
+        Cookies.set("token", token, { path: "/profile" }); // Store token in cookies "/" for root & "/profile" for usercontext
         toast.success("Welcome back! You’ve successfully logged in.", {
           onClose: () => setRedirect(true),
           position: "bottom-right",
