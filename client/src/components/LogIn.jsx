@@ -39,12 +39,12 @@ export default function LogIn() {
         setUser(user); // Set user data in context
         Cookies.set("token", token, { path: "/" }); // Store token in cookies
         localStorage.setItem("user", JSON.stringify(user)); // Store user in localStorage
-        setRedirect(true);
-        toast.success("Welcome back! You’ve successfully logged in.", {
-          position: "bottom-right",
-          style: { zIndex: 9999 },
-        });
       }
+      setRedirect(true);
+      toast.success("Welcome back! You’ve successfully logged in.", {
+        position: "bottom-right",
+        style: { zIndex: 9999 },
+      });
     } catch (e) {
       if (e.response && e.response.status === 401) {
         toast.error("Invalid email or password.", { position: "bottom-right" });
