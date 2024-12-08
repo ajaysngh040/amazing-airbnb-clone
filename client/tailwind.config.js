@@ -12,6 +12,7 @@ export default {
         ultraGrey: "#ececec",
         black: "rgb(34, 34, 34)",
       },
+      screens: { xs: "480px" },
     },
   },
   plugins: [],

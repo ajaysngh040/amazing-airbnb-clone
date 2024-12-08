@@ -3,11 +3,20 @@ import Header from "../components/Header";
 
 export default function IndexLayout() {
   return (
-    <div className="container mx-auto w-1600">
-      <div className="pt-24 flex flex-col ">
-        <Header />
+    <div className="container mx-auto px-4 lg:px-8 ">
+      {/* Header Section */}
+
+      <Header />
+
+      {/* Main Content Section */}
+      <main className="flex-grow flex items-center justify-center py-6 sm:py-16">
         <Outlet />
-      </div>
+      </main>
+
+      {/* Footer (Optional, if needed in the future) */}
+      {/* <footer className="py-4 text-center text-sm text-gray-600 dark:text-gray-400">
+        © 2024 Your Company Name. All rights reserved.
+      </footer> */}
     </div>
   );
 }

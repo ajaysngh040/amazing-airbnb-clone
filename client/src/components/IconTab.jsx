@@ -15,8 +15,8 @@ const items = locationsTab.map((item) => {
 });
 const IconTab = () => {
   return (
-    <div className="w-full fixed top-11 left-0 z-50 bg-white px-12 mt-8 ">
-      <Tabs items={items} className="w-full" />
+    <div className="w-full fixed top-8 left-0 z-50 bg-white mt-8 px-8 lg:px-16">
+      <Tabs items={items} />
     </div>
   );
 };

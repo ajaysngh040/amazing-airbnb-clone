@@ -20,7 +20,7 @@ export default function PlacePage() {
   if (!place) return "";
 
   return (
-    <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8">
+    <div className="mt-4 bg-white -mx-8 px-8 pt-8">
       <h1 className="text-xl font-medium">
         {place.title}, {place.address}
       </h1>
